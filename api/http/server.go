@@ -64,6 +64,14 @@ func (server *Server) Start() error {
 	var uploadHandler = NewUploadHandler(middleWareService)
 	uploadHandler.FileService = server.FileService
 	var fileHandler = newFileHandler(server.AssetsPath)
+    var monitorHandler = NewMonitorHandler(middleWareService, MonitorOpts{
+		ES: EsOpts{
+    		endpoint: "http://0.0.0.0:9200/offline-*/_search",
+    	},
+    	Influx: InfluxOpts{
+    		endpoint: "http://0.0.0.0:8086/query",
+    	},
+    })
 
 	server.Handler = &Handler{
 		AuthHandler:      authHandler,
@@ -75,6 +83,7 @@ func (server *Server) Start() error {
 		WebSocketHandler: websocketHandler,
 		FileHandler:      fileHandler,
 		UploadHandler:    uploadHandler,
+        MonitorHandler:   monitorHandler,
 	}
 	err := server.updateActiveEndpoint(server.ActiveEndpoint)
 	if err != nil {

@@ -41,7 +41,9 @@ angular.module('portainer', [
   'task',
   'templates',
   'volumes',
-  'createVolume'])
+  'createVolume',
+  'monitor',
+  'monitorList'])
   .config(['$stateProvider', '$urlRouterProvider', '$httpProvider', 'localStorageServiceProvider', 'jwtOptionsProvider', function ($stateProvider, $urlRouterProvider, $httpProvider, localStorageServiceProvider, jwtOptionsProvider) {
     'use strict';
 
@@ -526,6 +528,38 @@ angular.module('portainer', [
       data: {
         requiresLogin: true
       }
+    })
+    .state('monitor', {
+        url: "^/monitor/:id",
+        views: {
+            "content": {
+                templateUrl: 'app/components/monitor/monitor.html',
+                controller: 'MonitorController'
+            },
+            "sidebar": {
+                templateUrl: 'app/components/sidebar/sidebar.html',
+                controller: 'SidebarController'
+            }
+        },
+        data: {
+            requiresLogin: true
+        }
+    })
+    .state('monitorList', {
+        url: "^/monitorList",
+        views: {
+            "content": {
+                templateUrl: 'app/components/monitorList/monitorList.html',
+                controller: 'MonitorListController'
+            },
+            "sidebar": {
+                templateUrl: 'app/components/sidebar/sidebar.html',
+                controller: 'SidebarController'
+            }
+        },
+        data: {
+            requiresLogin: true
+        }
     });
 
     // The Docker API likes to return plaintext errors, this catches them and disp
